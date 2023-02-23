@@ -6,7 +6,7 @@
 #include "gsl/span"
 #include <memory>
 using gsl::span;
-//bonjour patrice le hustler
+//bonjour Francis le Python
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
 class ListeFilms {
