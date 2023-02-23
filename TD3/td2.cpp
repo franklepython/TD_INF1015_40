@@ -48,7 +48,6 @@ string lireString(istream& fichier)
 
 #pragma endregion//}
 
-
 //TODO: Une fonction pour ajouter un Film à une ListeFilms, le film existant déjà; on veut uniquement ajouter le pointeur vers le film existant.  Cette fonction doit doubler la taille du tableau alloué, avec au minimum un élément, dans le cas où la capacité est insuffisante pour ajouter l'élément.  Il faut alors allouer un nouveau tableau plus grand, copier ce qu'il y avait dans l'ancien, et éliminer l'ancien trop petit.  Cette fonction ne doit copier aucun Film ni Acteur, elle doit copier uniquement des pointeurs.
 //[
 void ListeFilms::changeDimension(int nouvelleCapacite)
@@ -72,7 +71,6 @@ void ListeFilms::ajouterFilm(Film* film)
 		changeDimension(max(1, capacite * 2));
 	elements[nElements++] = film;
 }
-
 
 //]
 
@@ -259,26 +257,11 @@ void afficherFilm(const Film& film)
 }
 //]
 
-ostream& operator << (ostream& o, const Film& film) {
-
-	o << "Titre: " << film.titre << endl;
-	o << "  Réalisateur: " << film.realisateur << "  Année :" << film.anneeSortie << endl;
-	o << "  Recette: " << film.recette << "M$" << endl;
-	o << "Acteurs:" << endl;
-
-	for (const Acteur* acteur : spanListeActeurs(film.acteurs))
-		afficherActeur(*acteur);
-
-	return o;
-};
-
-
-
 void afficherListeFilms(const ListeFilms& listeFilms)
 {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
 	static const string ligneDeSeparation = //[
-		"\033[32m????????????????????????????????????????\033[0m\n";
+		"\033[32m────────────────────────────────────────\033[0m\n";
 	/*
 	//]
 	{};
@@ -324,7 +307,7 @@ int main()
 
 	int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Detected memory leak" de "4 bytes" affiché dans la "Sortie", qui réfère à cette ligne du programme.
 
-	static const string ligneDeSeparation = "\n\033[35m????????????????????????????????????????\033[0m\n";
+	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 
 	//TODO: Chaque TODO dans cette fonction devrait se faire en 1 ou 2 lignes, en appelant les fonctions écrites.
 
