@@ -1,3 +1,4 @@
+#include <memory>
 #pragma once
 // Structures mémoires pour une collection de films.
 
@@ -28,9 +29,15 @@ private:
 	bool possedeLesFilms_ = false; // Les films seront détruits avec la liste si elle les possède.
 };
 
-struct ListeActeurs {
-	int capacite, nElements;
-	Acteur** elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+class ListeActeurs {
+
+public:
+	ListeActeurs(int tailleTableauElements) : capacite(tailleTableauElements), elements(make_unique<Acteur* []>(tailleTableauElements)) {};
+	int capacite = 0, nElements = 0;
+	//Acteur** elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	unique_ptr<Acteur* []> elements;
+
+private:
 };
 
 struct Film
@@ -38,6 +45,7 @@ struct Film
 	std::string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
+	friend std::ostream& operator<< (std::ostream& o, const Film& film);
 };
 
 struct Acteur
