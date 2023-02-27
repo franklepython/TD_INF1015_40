@@ -95,7 +95,8 @@ void ListeFilms::enleverFilm(const Film* film)
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 //[
 // Voir la NOTE ci-dessous pourquoi Acteur* n'est pas const.  Noter que c'est valide puisque c'est la struct uniquement qui est const dans le paramètre, et non ce qui est pointé par la struct.
-span<Acteur*> spanListeActeurs(const ListeActeurs& liste) { return span(liste.elements, liste.nElements); }
+span<Acteur*> spanListeActeurs(const ListeActeurs& liste) { return span(liste.accederElements(), liste.obtenirNElements()); }
+
 
 //NOTE: Doit retourner un Acteur modifiable, sinon on ne peut pas l'utiliser pour modifier l'acteur tel que demandé dans le main, et on ne veut pas faire écrire deux versions.
 Acteur* ListeFilms::trouverActeur(const string& nomActeur) const
@@ -140,11 +141,13 @@ Film* lireFilm(istream& fichier//[
 	film.realisateur = lireString(fichier);
 	film.anneeSortie = lireUint16(fichier);
 	film.recette = lireUint16(fichier);
-	film.acteurs.nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
+	//film.acteurs.nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
 	//[
+	
+	film.acteurs.fixerNElements(lireUint8(fichier));
 	Film* filmp = new Film(film); //NOTE: On aurait normalement fait le "new" au début de la fonction pour directement mettre les informations au bon endroit; on le fait ici pour que le code ci-dessus puisse être directement donné aux étudiants sans qu'ils aient le "new" déjà écrit.
 	cout << "Création Film " << film.titre << endl;
-	filmp->acteurs.elements = new Acteur * [filmp->acteurs.nElements];
+	filmp->acteurs.elements = new Acteur * [filmp->acteurs.obtenirNElements()];
 	/*
 	//]
 	for (int i = 0; i < film.acteurs.nElements; i++) {
@@ -221,7 +224,7 @@ void detruireFilm(Film* film)
 			detruireActeur(acteur);
 	}
 	cout << "Destruction Film " << film->titre << endl;
-	delete[] film->acteurs.elements;
+	delete[] film->acteurs.accederElements();
 	delete film;
 }
 //]
@@ -257,6 +260,19 @@ void afficherFilm(const Film& film)
 }
 //]
 
+ostream& operator << (ostream& o, const Film& film) {
+
+	o << "Titre: " << film.titre << endl;
+	o << "  Réalisateur: " << film.realisateur << "  Année :" << film.anneeSortie << endl;
+	o << "  Recette: " << film.recette << "M$" << endl;
+	o << "Acteurs:" << endl;
+
+	for (const Acteur* acteur : spanListeActeurs(film.acteurs))
+		afficherActeur(*acteur);
+
+	return o;
+}
+
 void afficherListeFilms(const ListeFilms& listeFilms)
 {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme).
@@ -283,6 +299,9 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 	}
 }
 
+
+
+
 void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
 {
 	//TODO: Utiliser votre fonction pour trouver l'acteur (au lieu de le mettre à nullptr).
@@ -291,12 +310,13 @@ void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomA
 	/* //]
 	nullptr;
 //[ */
-//]
+//] 
 	if (acteur == nullptr)
 		cout << "Aucun acteur de ce nom" << endl;
 	else
 		afficherListeFilms(acteur->joueDans);
 }
+
 
 int main()
 {
@@ -356,7 +376,6 @@ int main()
 	//listeFilms.enleverFilm(nullptr); // Enlever un film qui n'est pas dans la liste (clairement que nullptr n'y est pas).
 	//afficherFilmographieActeur(listeFilms, "N'existe pas"); // Afficher les films d'un acteur qui n'existe pas.
 	//]
-
 	//TODO: Détruire tout avant de terminer le programme.  L'objet verifierFuitesAllocations devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
 //[
 //]
