@@ -136,18 +136,22 @@ Film* lireFilm(istream& fichier//[
 	, ListeFilms& listeFilms//]
 )
 {
-	Film film = {};
-	film.titre = lireString(fichier);
-	film.realisateur = lireString(fichier);
-	film.anneeSortie = lireUint16(fichier);
-	film.recette = lireUint16(fichier);
+	Film* filmp = new Film();
+	filmp->titre = lireString(fichier);
+	filmp->realisateur = lireString(fichier);
+	filmp->anneeSortie = lireUint16(fichier);
+	filmp->recette = lireUint16(fichier);
 	//film.acteurs.nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
 	//[
 	
-	film.acteurs.fixerNElements(lireUint8(fichier));
-	Film* filmp = new Film(film); //NOTE: On aurait normalement fait le "new" au début de la fonction pour directement mettre les informations au bon endroit; on le fait ici pour que le code ci-dessus puisse être directement donné aux étudiants sans qu'ils aient le "new" déjà écrit.
-	cout << "Création Film " << film.titre << endl;
+	filmp->acteurs.fixerNElements(lireUint8(fichier));
+	//Film* filmp = new Film(film); //NOTE: On aurait normalement fait le "new" au début de la fonction pour directement mettre les informations au bon endroit; on le fait ici pour que le code ci-dessus puisse être directement donné aux étudiants sans qu'ils aient le "new" déjà écrit.
+
+
+	cout << "Création Film " << filmp->titre << endl;
+
 	//filmp->acteurs.elements = new Acteur * [filmp->acteurs.obtenirNElements()]; 
+
 	ListeActeurs listeActeurs(filmp->acteurs.obtenirNElements());
 
 	
@@ -338,12 +342,13 @@ int main()
 	int* fuite = new int; //TODO: Enlever cette ligne après avoir vérifié qu'il y a bien un "Detected memory leak" de "4 bytes" affiché dans la "Sortie", qui réfère à cette ligne du programme.
 
 	static const string ligneDeSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-
+	
 	//TODO: Chaque TODO dans cette fonction devrait se faire en 1 ou 2 lignes, en appelant les fonctions écrites.
 
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ListeFilms listeFilms("films.bin");
-
+	/*
+	
 	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
 	//[
@@ -354,7 +359,7 @@ int main()
 	//TODO: Afficher la liste des films.  Il devrait y en avoir 7.
 	//TODO: Afficher la liste des films.  Il devrait y en avoir 7.
 	//[
-	afficherListeFilms(listeFilms);
+	//afficherListeFilms(listeFilms);
 	//]
 
 	//TODO: Modifier l'année de naissance de Benedict Cumberbatch pour être 1976 (elle était 0 dans les données lues du fichier).  Vous ne pouvez pas supposer l'ordre des films et des acteurs dans les listes, il faut y aller par son nom.
@@ -377,7 +382,7 @@ int main()
 	cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
 	//TODO: Afficher la liste des films.
 	//[
-	afficherListeFilms(listeFilms);
+	//afficherListeFilms(listeFilms);
 	//]
 
 	//TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
@@ -388,5 +393,5 @@ int main()
 	//]
 	//TODO: Détruire tout avant de terminer le programme.  L'objet verifierFuitesAllocations devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
 //[
-//]
+//]*/
 }
