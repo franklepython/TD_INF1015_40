@@ -147,7 +147,12 @@ Film* lireFilm(istream& fichier//[
 	film.acteurs.fixerNElements(lireUint8(fichier));
 	Film* filmp = new Film(film); //NOTE: On aurait normalement fait le "new" au début de la fonction pour directement mettre les informations au bon endroit; on le fait ici pour que le code ci-dessus puisse être directement donné aux étudiants sans qu'ils aient le "new" déjà écrit.
 	cout << "Création Film " << film.titre << endl;
-	filmp->acteurs.elements = new Acteur * [filmp->acteurs.obtenirNElements()];
+	//filmp->acteurs.elements = new Acteur * [filmp->acteurs.obtenirNElements()]; 
+	ListeActeurs listeActeurs(filmp->acteurs.obtenirNElements());
+
+	
+	//filmp->acteurs.fixerElements(filmp);
+
 	/*
 	//]
 	for (int i = 0; i < film.acteurs.nElements; i++) {
@@ -161,7 +166,7 @@ Film* lireFilm(istream& fichier//[
 			); //TODO: Placer l'acteur au bon endroit dans les acteurs du film.
 			//TODO: Ajouter le film à la liste des films dans lesquels l'acteur joue.
 		//[
-		acteur->joueDans.ajouterFilm(filmp);
+		//acteur->joueDans.ajouterFilm(filmp);
 		//]
 	}
 	//[
@@ -212,11 +217,13 @@ void detruireActeur(Acteur* acteur)
 	cout << "Destruction Acteur " << acteur->nom << endl;
 	delete acteur;
 }
-bool joueEncore(const Acteur* acteur)
+
+/*bool joueEncore(const Acteur* acteur)
 {
 	return acteur->joueDans.size() != 0;
-}
-void detruireFilm(Film* film)
+}*/
+
+/*void detruireFilm(Film* film)
 {
 	for (Acteur* acteur : spanListeActeurs(film->acteurs)) {
 		acteur->joueDans.enleverFilm(film);
@@ -227,8 +234,8 @@ void detruireFilm(Film* film)
 	delete[] film->acteurs.accederElements();
 	delete film;
 }
-//]
-
+//]*/
+/*
 //TODO: Une fonction pour détruire une ListeFilms et tous les films qu'elle contient.
 //[
 //NOTE: Attention que c'est difficile que ça fonctionne correctement avec le destructeur qui détruit la liste.  Mon ancienne implémentation utilisait une méthode au lieu d'un destructeur.  Le problème est que la matière pour le constructeur de copie/move n'est pas dans le TD2 mais le TD3, donc si on copie une liste (par exemple si on la retourne de la fonction creerListe) elle sera incorrectement copiée/détruite.  Ici, creerListe a été converti en constructeur, qui évite ce problème.
@@ -239,7 +246,7 @@ ListeFilms::~ListeFilms()
 			detruireFilm(film);
 	delete[] elements;
 }
-//]
+//]*/
 
 void afficherActeur(const Acteur& acteur)
 {
@@ -302,7 +309,9 @@ void afficherListeFilms(const ListeFilms& listeFilms)
 
 
 
-void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
+
+
+/*void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
 {
 	//TODO: Utiliser votre fonction pour trouver l'acteur (au lieu de le mettre à nullptr).
 	const Acteur* acteur = //[
@@ -310,12 +319,13 @@ void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomA
 	/* //]
 	nullptr;
 //[ */
-//] 
-	if (acteur == nullptr)
+//]
+	/*if (acteur == nullptr)
 		cout << "Aucun acteur de ce nom" << endl;
 	else
 		afficherListeFilms(acteur->joueDans);
-}
+};
+*/
 
 
 int main()
@@ -355,12 +365,12 @@ int main()
 	cout << ligneDeSeparation << "Liste des films où Benedict Cumberbatch joue sont:" << endl;
 	//TODO: Afficher la liste des films où Benedict Cumberbatch joue.  Il devrait y avoir Le Hobbit et Le jeu de l'imitation.
 	//[
-	afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
+	//afficherFilmographieActeur(listeFilms, "Benedict Cumberbatch");
 	//]
 
 	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
 	//[
-	detruireFilm(listeFilms.enSpan()[0]);
+	//detruireFilm(listeFilms.enSpan()[0]);
 	listeFilms.enleverFilm(listeFilms.enSpan()[0]);
 	//]
 
