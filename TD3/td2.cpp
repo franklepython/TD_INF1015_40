@@ -136,16 +136,22 @@ Film* lireFilm(istream& fichier//[
 	, ListeFilms& listeFilms//]
 )
 {
-	Film* filmp = new Film();
+	Film film {};
+	film.titre = lireString(fichier);
+	film.realisateur = lireString(fichier);
+	film.anneeSortie = lireUint16(fichier);
+	film.recette = lireUint16(fichier);
+
+	/*Film* filmp = new Film();
 	filmp->titre = lireString(fichier);
 	filmp->realisateur = lireString(fichier);
 	filmp->anneeSortie = lireUint16(fichier);
-	filmp->recette = lireUint16(fichier);
+	filmp->recette = lireUint16(fichier);*/
 	//film.acteurs.nElements = lireUint8(fichier);  //NOTE: Vous avez le droit d'allouer d'un coup le tableau pour les acteurs, sans faire de réallocation comme pour ListeFilms.  Vous pouvez aussi copier-coller les fonctions d'allocation de ListeFilms ci-dessus dans des nouvelles fonctions et faire un remplacement de Film par Acteur, pour réutiliser cette réallocation.
 	//[
 	
+	Film* filmp = new Film(film); //NOTE: On aurait normalement fait le "new" au début de la fonction pour directement mettre les informations au bon endroit; on le fait ici pour que le code ci-dessus puisse être directement donné aux étudiants sans qu'ils aient le "new" déjà écrit.
 	filmp->acteurs.fixerNElements(lireUint8(fichier));
-	//Film* filmp = new Film(film); //NOTE: On aurait normalement fait le "new" au début de la fonction pour directement mettre les informations au bon endroit; on le fait ici pour que le code ci-dessus puisse être directement donné aux étudiants sans qu'ils aient le "new" déjà écrit.
 
 
 	cout << "Création Film " << filmp->titre << endl;
