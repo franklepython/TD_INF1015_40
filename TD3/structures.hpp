@@ -1,11 +1,12 @@
-#include <memory>
 #pragma once
 // Structures mémoires pour une collection de films.
 
 #include <string>
+#include <memory>
 #include <cassert>
 #include "gsl/span"
 using gsl::span;
+using namespace std;
 
 struct Film; struct Acteur; // Permet d'utiliser les types alors qu'ils seront défini après.
 
@@ -17,9 +18,12 @@ public:
 	~ListeFilms();
 	void ajouterFilm(Film* film);
 	void enleverFilm(const Film* film);
-	Acteur* trouverActeur(const std::string& nomActeur) const;
+	shared_ptr<Acteur> trouverActeur(const std::string& nomActeur) const;
 	span<Film*> enSpan() const;
 	int size() const { return nElements; }
+
+	Film*& operator[](int const index);
+	Film*& operator[](int const index) const;
 
 private:
 	void changeDimension(int nouvelleCapacite);
@@ -29,27 +33,31 @@ private:
 	bool possedeLesFilms_ = false; // Les films seront détruits avec la liste si elle les possède.
 };
 
-class ListeActeurs {
+struct ListeActeurs {
 
-public:
-	ListeActeurs(int tailleTableauElements) : capacite(tailleTableauElements), elements(make_unique<Acteur* []>(tailleTableauElements)) {};
 	int capacite = 0, nElements = 0;
-	//Acteur** elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-	unique_ptr<Acteur* []> elements;
-
-private:
+	unique_ptr<shared_ptr<Acteur>[]> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
+	
+	ListeActeurs() = default;
+	ListeActeurs(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements), elements(make_unique<shared_ptr<Acteur>[]>(tailleTableauElements)) {};
 };
+
+
 
 struct Film
 {
-	std::string titre, realisateur; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-	int anneeSortie, recette; // Année de sortie et recette globale du film en millions de dollars
+	Film() = default;
+
+	string titre = "aucun", realisateur = "aucun"; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
+	int anneeSortie = 0, recette = 0; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
 	friend std::ostream& operator<< (std::ostream& o, const Film& film);
+
+	Film& operator=(Film& autreFilm);
 };
 
 struct Acteur
 {
-	std::string nom; int anneeNaissance; char sexe;
-	ListeFilms joueDans;
+	std::string nom = "aucun"; int anneeNaissance = 0; char sexe = 0;
+	//ListeFilms joueDans;
 };
