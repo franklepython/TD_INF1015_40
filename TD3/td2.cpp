@@ -322,18 +322,18 @@ Film*& ListeFilms::operator[](int const index) const {
 
 Film& Film::operator=(Film& autreFilm) {
 
-	//if (*this != autreFilm) {
-	this->titre = autreFilm.titre;
-	this->realisateur = autreFilm.realisateur;
-	this->anneeSortie = autreFilm.anneeSortie;
-	this->recette = autreFilm.recette;
-	this->acteurs.capacite = autreFilm.acteurs.capacite;
-	this->acteurs.nElements = autreFilm.acteurs.nElements;
-	this->acteurs.elements = make_unique<shared_ptr<Acteur>[]>(autreFilm.acteurs.nElements);
-	for (int i : range(autreFilm.acteurs.nElements)) {
-		this->acteurs.elements[i] = autreFilm.acteurs.elements[i];
+	if (this != &autreFilm) {
+		this->titre = autreFilm.titre;
+		this->realisateur = autreFilm.realisateur;
+		this->anneeSortie = autreFilm.anneeSortie;
+		this->recette = autreFilm.recette;
+		this->acteurs.capacite = autreFilm.acteurs.capacite;
+		this->acteurs.nElements = autreFilm.acteurs.nElements;
+		this->acteurs.elements = make_unique<shared_ptr<Acteur>[]>(autreFilm.acteurs.nElements);
+		for (int i : range(autreFilm.acteurs.nElements)) {
+			this->acteurs.elements[i] = autreFilm.acteurs.elements[i];
+		}
 	}
-	//}
 
 	return *this;
 }
@@ -374,11 +374,18 @@ int main()
 
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ListeFilms listeFilms("films.bin");
-	Film film1;
-	film1.titre = "PatriceTheHustler";
-	film1 = *listeFilms[0];
+	Film skylien;
+	skylien = *listeFilms[0];
+	skylien.titre = "Skylien";
+	skylien.acteurs.elements[0]->nom = listeFilms[1]->acteurs.elements[0]->nom;
+	
+	skylien.acteurs.elements[0]->nom = "Daniel Wroughton Craig";
+	listeFilms[1]->acteurs.elements[0]->nom = skylien.acteurs.elements[0]->nom; // 5
 
-	cout << "voici film1 " << film1;
+	cout << skylien << endl;
+	cout << *listeFilms[0] << endl;
+	cout << *listeFilms[1] << endl;
+
 	
 	/*cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
