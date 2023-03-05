@@ -412,15 +412,14 @@ int main()
 //[
 //]
 
-	/*Liste<string> listeTextes(2);
+	Liste<string> listeTextes(2);
+	shared_ptr<string> ptrString1 = make_shared<string>("string1");
+	shared_ptr<string> ptrString2 = make_shared<string>("string2");
 
-	listeTextes.elements[0] = make_shared<string>("Hello");
-	listeTextes.elements[1] = make_shared<string>("Guys");
+	listeTextes.modifierElements(ptrString1, 0);
+	listeTextes.modifierElements(ptrString2, 1);
 
-	cout << *listeTextes.elements[0] << endl;
-	cout << *listeTextes.elements[1] << endl;
-
-	Liste<string> listeTextes2 = listeTextes;*/
+	Liste<string> listeTextes2 = listeTextes;
 
 	
 }
