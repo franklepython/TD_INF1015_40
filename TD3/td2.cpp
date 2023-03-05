@@ -153,6 +153,7 @@ Film* lireFilm(istream& fichier//[
 	filmp->anneeSortie = film.anneeSortie;
 	filmp->recette = film.recette;
 	filmp->acteurs.nElements = film.acteurs.nElements;
+	filmp->acteurs.capacite = film.acteurs.nElements;
 
 	cout << "Création Film " << filmp->titre << endl;
 	filmp->acteurs.elements = make_unique<shared_ptr<Acteur>[]>(filmp->acteurs.nElements);
@@ -320,28 +321,6 @@ Film*& ListeFilms::operator[](int const index) const {
 	return elements[index];
 }
 
-Film& Film::operator=(Film& autreFilm) {
-
-	if (this != &autreFilm) {
-		this->titre = autreFilm.titre;
-		this->realisateur = autreFilm.realisateur;
-		this->anneeSortie = autreFilm.anneeSortie;
-		this->recette = autreFilm.recette;
-		this->acteurs.capacite = autreFilm.acteurs.capacite;
-		this->acteurs.nElements = autreFilm.acteurs.nElements;
-		this->acteurs.elements = make_unique<shared_ptr<Acteur>[]>(autreFilm.acteurs.nElements);
-		for (int i : range(autreFilm.acteurs.nElements)) {
-			this->acteurs.elements[i] = autreFilm.acteurs.elements[i];
-		}
-	}
-
-	return *this;
-}
-
-
-
-
-
 /*void afficherFilmographieActeur(const ListeFilms& listeFilms, const string& nomActeur)
 {
 	//TODO: Utiliser votre fonction pour trouver l'acteur (au lieu de le mettre à nullptr).
@@ -374,20 +353,20 @@ int main()
 
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ListeFilms listeFilms("films.bin");
-	Film skylien;
-	skylien = *listeFilms[0];
+
+	Film skylien = *listeFilms[0];
 	skylien.titre = "Skylien";
 	skylien.acteurs.elements[0]->nom = listeFilms[1]->acteurs.elements[0]->nom;
 	
-	skylien.acteurs.elements[0]->nom = "Daniel Wroughton Craig";
-	listeFilms[1]->acteurs.elements[0]->nom = skylien.acteurs.elements[0]->nom; // 5
+	skylien.acteurs.elements[0]->nom = "Daniel Wroughton Craig"; //creer un methode pour changer les noms 
+	listeFilms[1]->acteurs.elements[0]->nom = skylien.acteurs.elements[0]->nom; //
 
 	cout << skylien << endl;
 	cout << *listeFilms[0] << endl;
 	cout << *listeFilms[1] << endl;
-
 	
-	/*cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
+	
+	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
 	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
 	//[
 	afficherFilm(*listeFilms.enSpan()[0]);
@@ -423,8 +402,6 @@ int main()
 	afficherListeFilms(listeFilms);
 	//]
 
-	//Film skylien =  *listeFilms[0]
-
 	//TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
 	//[
 	// Les lignes à mettre ici dépendent de comment ils ont fait leurs fonctions.  Dans mon cas:
@@ -433,6 +410,17 @@ int main()
 	//]
 	//TODO: Détruire tout avant de terminer le programme.  L'objet verifierFuitesAllocations devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
 //[
-//]*/
+//]
+
+	/*Liste<string> listeTextes(2);
+
+	listeTextes.elements[0] = make_shared<string>("Hello");
+	listeTextes.elements[1] = make_shared<string>("Guys");
+
+	cout << *listeTextes.elements[0] << endl;
+	cout << *listeTextes.elements[1] << endl;
+
+	Liste<string> listeTextes2 = listeTextes;*/
+
 	
 }
