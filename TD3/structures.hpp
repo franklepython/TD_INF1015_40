@@ -33,35 +33,32 @@ private:
 	bool possedeLesFilms_ = false; // Les films seront détruits avec la liste si elle les possède.
 };
 
-struct ListeActeurs {
-
-	int capacite = 0, nElements = 0;
-	unique_ptr<shared_ptr<Acteur>[]> elements; // Pointeur vers un tableau de Acteur*, chaque Acteur* pointant vers un Acteur.
-	
-	ListeActeurs() = default;
-	ListeActeurs(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements), elements(make_unique<shared_ptr<Acteur>[]>(tailleTableauElements)) {};
-	ListeActeurs(ListeActeurs& autre) : capacite(autre.capacite), nElements(autre.nElements), elements(make_unique<shared_ptr<Acteur>[]>(autre.capacite)) {
-
-		for (int i = 0; i < autre.nElements; i++) {
-			elements[i] = make_shared<Acteur>(*autre.elements[i]);
-		}
-		
-	}
-};
-
-/*template<typename T>
+template<typename T>
 class Liste {
 public:
 
-	unique_ptr<shared_ptr<T>[]> elements;
-	int capacite = 0, nElements = 0;
 	Liste() = default;
 	Liste(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements), elements(make_unique<shared_ptr<T>[]>(tailleTableauElements)) {};
+	Liste(Liste& autre) : capacite(autre.capacite), nElements(autre.nElements), elements(make_unique<shared_ptr<T>[]>(autre.capacite)) {
 
+		for (int i = 0; i < autre.nElements; i++) {
+			elements[i] = make_shared<T>(*autre.elements[i]);
+		}
+
+	}
+
+	void modifierElements(const shared_ptr<T> const ptr, const int const index) {
+		if (index < capacite) {
+			elements[index] = ptr;
+		}
+	}
+
+	int capacite = 0, nElements = 0;
+	unique_ptr<shared_ptr<T>[]> elements;
 private:
 };
 
-using ListeActeurs = Liste<Acteur>;*/
+using ListeActeurs = Liste<Acteur>;
 
 
 
