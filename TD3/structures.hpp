@@ -25,6 +25,7 @@ public:
 	Film*& operator[](int const index);
 	Film*& operator[](int const index) const;
 	Film* rechercheCritereFilm(const auto& critereDeRecherche) const;
+	void retourRechercheCritereFilm(const ListeFilms& listeFilms);
 
 private:
 	void changeDimension(int nouvelleCapacite);
