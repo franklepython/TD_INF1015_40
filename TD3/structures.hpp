@@ -40,7 +40,28 @@ struct ListeActeurs {
 	
 	ListeActeurs() = default;
 	ListeActeurs(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements), elements(make_unique<shared_ptr<Acteur>[]>(tailleTableauElements)) {};
+	ListeActeurs(ListeActeurs& autre) : capacite(autre.capacite), nElements(autre.nElements), elements(make_unique<shared_ptr<Acteur>[]>(autre.capacite)) {
+
+		for (int i = 0; i < autre.nElements; i++) {
+			elements[i] = make_shared<Acteur>(*autre.elements[i]);
+		}
+		
+	}
 };
+
+/*template<typename T>
+class Liste {
+public:
+
+	unique_ptr<shared_ptr<T>[]> elements;
+	int capacite = 0, nElements = 0;
+	Liste() = default;
+	Liste(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements), elements(make_unique<shared_ptr<T>[]>(tailleTableauElements)) {};
+
+private:
+};
+
+using ListeActeurs = Liste<Acteur>;*/
 
 
 
@@ -53,7 +74,7 @@ struct Film
 	ListeActeurs acteurs;
 	friend std::ostream& operator<< (std::ostream& o, const Film& film);
 
-	Film& operator=(Film& autreFilm);
+	//Film(const Film& autreFilm);
 };
 
 struct Acteur
