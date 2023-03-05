@@ -431,6 +431,15 @@ int main()
 
 	Liste<string> listeTextes2 = listeTextes;
 
+	shared_ptr<string> ptrString3 = make_shared<string>("string3");
+	listeTextes.modifierElements(ptrString3, 0);
+
+	cout << *listeTextes.elements[0] << endl;
+
+	listeTextes.modifierElements(ptrString3, 0);
+	cout << listeTextes.elements[0] << endl;
+
+
 	//Affichage de la recherche d'un film à l'aide d'un critère à l'aide de lambda.
 	Film* filmCritere;
 	filmCritere = listeFilms.rechercheCritereFilm([](auto film) {
