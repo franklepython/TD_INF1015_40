@@ -75,7 +75,7 @@ void ListeFilms::ajouterFilm(Film* film)
 //]
 
 //TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
-//[
+//[y7ymmk
 // On a juste fait une version const qui retourne un span non const.  C'est valide puisque c'est la struct qui est const et non ce qu'elle pointe.  Ça ne va peut-être pas bien dans l'idée qu'on ne devrait pas pouvoir modifier une liste const, mais il y aurais alors plusieurs fonctions à écrire en version const et non-const pour que ça fonctionne bien, et ce n'est pas le but du TD (il n'a pas encore vraiment de manière propre en C++ de définir les deux d'un coup).
 span<Film*> ListeFilms::enSpan() const { return span(elements, nElements); }
 
@@ -95,8 +95,8 @@ void ListeFilms::enleverFilm(const Film* film)
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 //[
 // Voir la NOTE ci-dessous pourquoi Acteur* n'est pas const.  Noter que c'est valide puisque c'est la struct uniquement qui est const dans le paramètre, et non ce qui est pointé par la struct.
-
-span<shared_ptr<Acteur>> spanListeActeurs(const ListeActeurs& liste) { return span(liste.elements.get(), liste.nElements);}
+template <class T>
+span<shared_ptr<T>> Liste<T>::spanListeActeurs() const { return span(elements.get(), nElements); }
 
 
 //NOTE: Doit retourner un Acteur modifiable, sinon on ne peut pas l'utiliser pour modifier l'acteur tel que demandé dans le main, et on ne veut pas faire écrire deux versions.
@@ -104,7 +104,7 @@ span<shared_ptr<Acteur>> spanListeActeurs(const ListeActeurs& liste) { return sp
 shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur) const
 {
 	for (const Film* film : enSpan()) {
-		for (shared_ptr<Acteur> acteur : spanListeActeurs(film->acteurs)) {
+		for (shared_ptr<Acteur> acteur : film->acteurs.spanListeActeurs()) {
 			if (acteur->nom == nomActeur)
 				return acteur;
 		}
@@ -134,7 +134,30 @@ shared_ptr<Acteur> lireActeur(istream& fichier//[
 	//]
 	return {}; //TODO: Retourner un pointeur soit vers un acteur existant ou un nouvel acteur ayant les bonnes informations, selon si l'acteur existait déjà.  Pour fins de débogage, affichez les noms des acteurs crées; vous ne devriez pas voir le même nom d'acteur affiché deux fois pour la création.
 }
+Film* lireFilm(istream& fichier, ListeFilms& listeFilms){
+	//Création film qu'on retourne directement.
+	Film film = {};
+	//Création d'un nouvau pointeur vers le film qu'on va associer les valeurs qu'on va lire dans le fichier.
+	Film* pointeurFilm = new Film;
+	//Lecture du fichier avec le Film* qui s'associe tout les valeurs appropriées.
+	pointeurFilm->titre = lireString(fichier);
+	pointeurFilm->realisateur = lireString(fichier);
+	pointeurFilm->anneeSortie = lireUint16(fichier);
+	pointeurFilm->recette = lireUint16(fichier);
+	//On utilise les méthodes de Liste<Acteur> pour changer le nombre d'éléments et le stocker dans les attributs de la liste.
+	pointeurFilm->acteurs.modifierNElements(lireUint8(fichier));
+	pointeurFilm->acteurs.modifierCapacite(pointeurFilm->acteurs.accesNElements());
 
+	//Création du nouveau film et nous utilisons le pointeur film qui a récupéré les informations du fichier pour créer les attributs de ce nouveau film.
+	cout << "Création Film " << film.titre << endl;
+	pointeurFilm->acteurs.modifierElements(make_unique<shared_ptr<Acteur>[]>(pointeurFilm->acteurs.accesNElements()));
+
+	//On change les Pointeurs d'Acteurs pour ceux du fichier dans notre pointeur film.
+	for (shared_ptr<Acteur>& acteur : pointeurFilm->acteurs.spanListeActeurs())
+		acteur = lireActeur(fichier, listeFilms);
+	return pointeurFilm;
+}
+/* LireFilm Version de Patrice
 Film* lireFilm(istream& fichier//[
 	, ListeFilms& listeFilms//]
 )
@@ -162,7 +185,6 @@ Film* lireFilm(istream& fichier//[
 	//]
 	for (int i = 0; i < film.acteurs.nElements; i++) {
 		//[
-	*/
 
 	for (shared_ptr<Acteur> & acteur : spanListeActeurs(filmp->acteurs)) {
 		acteur =  lireActeur(fichier//[
@@ -178,6 +200,7 @@ Film* lireFilm(istream& fichier//[
 	//]
 	return {}; //TODO: Retourner le pointeur vers le nouveau film.
 }
+*/
 
 ListeFilms::ListeFilms(const string& nomFichier) : possedeLesFilms_(true)
 {
@@ -267,7 +290,7 @@ void afficherFilm(const Film& film)
 	cout << "  Recette: " << film.recette << "M$" << endl;
 
 	cout << "Acteurs:" << endl;
-	for (const shared_ptr<Acteur> acteur : spanListeActeurs(film.acteurs))
+	for (const shared_ptr<Acteur> acteur : film.acteurs.spanListeActeurs())
 		afficherActeur(*acteur);
 }
 //]
@@ -279,7 +302,7 @@ ostream& operator << (ostream& o, const Film& film) {
 	o << "  Recette: " << film.recette << "M$" << endl;
 	o << "Acteurs:" << endl;
 
-	for (const shared_ptr<Acteur> acteur : spanListeActeurs(film.acteurs))
+	for (const shared_ptr<Acteur> acteur : film.acteurs.spanListeActeurs())
 		afficherActeur(*acteur);
 
 	return o;
@@ -362,6 +385,11 @@ void ListeFilms::retourRechercheCritereFilm(const ListeFilms& listeFilms) {
 	}
 }
 
+template <class T>
+shared_ptr<T> Liste<T>::operator[](int index)
+{
+	return spanListeActeurs()[index];
+}
 
 int main()
 {
@@ -381,11 +409,14 @@ int main()
 
 	Film skylien = *listeFilms[0];
 	skylien.titre = "Skylien";
-	skylien.acteurs.elements[0]->nom = listeFilms[1]->acteurs.elements[0]->nom;
-	
-	skylien.acteurs.elements[0]->nom = "Daniel Wroughton Craig"; //creer un methode pour changer les noms 
-	listeFilms[1]->acteurs.elements[0]->nom = skylien.acteurs.elements[0]->nom; //
 
+
+
+	skylien.acteurs.accesElements()[0] = listeFilms[1]->acteurs.accesElements()[0];
+	skylien.acteurs[0]->nom = "Daniel Wroughton Craig";
+	//skylien.acteurs.modifierElements()[0]->nom = "Daniel Wroughton Craig"; //creer un methode pour changer les noms 
+	//listeFilms[1]->acteurs.elements[0]->nom = skylien.acteurs.elements[0]->nom; //
+	
 	cout << skylien << endl;
 	cout << *listeFilms[0] << endl;
 	cout << *listeFilms[1] << endl;
@@ -441,8 +472,8 @@ int main()
 	shared_ptr<string> ptrString1 = make_shared<string>("string1");
 	shared_ptr<string> ptrString2 = make_shared<string>("string2");
 
-	listeTextes.modifierElements(ptrString1, 0);
-	listeTextes.modifierElements(ptrString2, 1);
+	listeTextes.modifierElementsIndex(ptrString1, 0);
+	listeTextes.modifierElementsIndex(ptrString2, 1);
 
 	Liste<string> listeTextes2 = listeTextes;
 
