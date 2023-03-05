@@ -337,6 +337,16 @@ Film*& ListeFilms::operator[](int const index) const {
 };
 */
 
+//Recherche d'un film à l'aide d'un critère 
+Film* ListeFilms::rechercheCritereFilm(const auto& critereDeRecherche) const {
+	for (auto&& film : enSpan()) {
+		if (critereDeRecherche(film)) {
+			return film;
+		}
+	}
+	return nullptr;
+}
+
 
 int main()
 {
@@ -420,6 +430,22 @@ int main()
 	listeTextes.modifierElements(ptrString2, 1);
 
 	Liste<string> listeTextes2 = listeTextes;
+
+	//Affichage de la recherche d'un film à l'aide d'un critère à l'aide de lambda.
+	Film* filmCritere;
+	filmCritere = listeFilms.rechercheCritereFilm([](auto film) {
+		return film->recette == 955;
+		}
+	);
+	if (filmCritere == nullptr) {
+		cout << "Aucun film possède le critère rechercheé" << endl;
+	}
+	else {
+		cout << "Le film suivant possède le critère recherché: " << endl;
+		cout << *filmCritere;
+	}
+
+	
 
 	
 }
