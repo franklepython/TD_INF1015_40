@@ -43,25 +43,26 @@ private:
 template<class T >
 class Liste {
 public:
+	
 	Liste() = default;
 	//~Liste() = default;
 
 	// Méthode pour modifier la capacité de la la liste
 	void modifierCapacite(int newCapacite) {
-		capacite = newCapacite;
+		capacite_ = newCapacite;
 	}
 
 	// Méthode pour modifier le nombre d'élément de la la liste
 	void modifierNElements(int newNElements) {
-		nElements = newNElements;
+		nElements_ = newNElements;
 	}
 
 	// Méthode pour modifier un élément de la la liste
 	void modifierElements(unique_ptr<shared_ptr<T>[]> newElements) {
-		elements = move(newElements);
+		elements_ = move(newElements);
 	}
 	
-	void CreationPointeursElementsString( string* textes) {
+	void CreationPointeursElementsString(string* textes) {
 		modifierElements(make_unique<shared_ptr<string>[]>(accesNElements()));
 		for (int i = 0; i < accesNElements(); i++)
 			accesElements()[i] = make_shared<string>(textes[i]);
@@ -69,27 +70,27 @@ public:
 
 	//Méthode pour avoir la capacité actuelle de la liste
 	int accesCapacite() const {
-		return capacite;
+		return capacite_;
 	}
 
 	//Méthode pour avoir le nombre d'éléments actuel de la liste
 	int accesNElements() const {
-		return nElements;
+		return nElements_;
 	}
 
 	//Méthode pour avoir un élément de la liste (dans notre cas un shared_ptr)
 	auto accesElements() const {
-		return elements.get();
+		return elements_.get();
 	}
 	//Constructeur de liste avec la taille du tableau et les différents types
-	Liste(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements) {
-	elements = make_unique<shared_ptr<T>[]>(tailleTableauElements);
+	Liste(int tailleTableauElements) : capacite_(tailleTableauElements), nElements_(tailleTableauElements) {
+	elements_ = make_unique<shared_ptr<T>[]>(nElements_);
 	}
 	
-	Liste(const Liste<T>& autre) : capacite(autre.capacite), nElements(autre.nElements) {
-		elements = make_unique<shared_ptr<T>[]>(autre.nElements);
-		for (int j = 0;  j < autre.nElements; j++) {
-			elements[j] = autre.elements[j];
+	Liste(const Liste<T>& autre) : capacite_(autre.capacite_), nElements_(autre.nElements_) {
+		elements_ = make_unique<shared_ptr<T>[]>(autre.nElements_);
+		for (int j = 0;  j < autre.nElements_; j++) {
+			elements_[j] = autre.elements_[j];
 		}
 	}
 	
@@ -101,14 +102,14 @@ public:
 
 	//Méthode pour modifier un éléments d'une liste avec son index
 	void modifierElementsIndex(const shared_ptr<T> ptr, int const index) {
-		if (index < capacite) {
-			elements[index] = ptr;
+		if (index < capacite_) {
+			elements_[index] = ptr;
 		}
 	}
 
 private:
-	int capacite = 0, nElements = 0;
-	unique_ptr<shared_ptr<T>[]> elements;
+	int capacite_ = 0, nElements_ = 0;
+	unique_ptr<shared_ptr<T>[]> elements_;
 };
 
 using ListeActeurs = Liste<Acteur>;

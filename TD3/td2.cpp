@@ -92,7 +92,7 @@ void ListeFilms::enleverFilm(const Film* film)
 
 //Initialisation du span de listeActeurs
 template <class T>
-span<shared_ptr<T>> Liste<T>::spanListeActeurs() const { return span(elements.get(), nElements); }
+span<shared_ptr<T>> Liste<T>::spanListeActeurs() const { return span(elements_.get(), nElements_); }
 
 //TODO: Une fonction pour trouver un Acteur par son nom dans une ListeFilms, qui retourne un pointeur vers l'acteur, ou nullptr si l'acteur n'est pas trouvé.  Devrait utiliser span.
 shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur) const
