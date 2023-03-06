@@ -82,10 +82,14 @@ public:
 		return elements.get();
 	}
 	//Constructeur de liste avec la taille du tableau et les différents types
-	Liste(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements), elements(make_unique<shared_ptr<T>[]>(tailleTableauElements)) {};
-	Liste(Liste& autre) : capacite(autre.capacite), nElements(autre.nElements), elements(make_unique<shared_ptr<T>[]>(autre.capacite)) {
-		for (int i = 0; i < autre.nElements; i++) {
-			elements[i] = make_shared<T>(*autre.elements[i]);
+	Liste(int tailleTableauElements) : capacite(tailleTableauElements), nElements(tailleTableauElements) {
+	elements = make_unique<shared_ptr<T>[]>(tailleTableauElements);
+	}
+	
+	Liste(const Liste<T>& autre) : capacite(autre.capacite), nElements(autre.nElements) {
+		elements = make_unique<shared_ptr<T>[]>(autre.nElements);
+		for (int j = 0;  j < autre.nElements; j++) {
+			elements[j] = autre.elements[j];
 		}
 	}
 	
@@ -96,7 +100,7 @@ public:
 	shared_ptr<T> operator [](int index);
 
 	//Méthode pour modifier un éléments d'une liste avec son index
-	void modifierElementsIndex(const shared_ptr<T> const ptr, const int const index) {
+	void modifierElementsIndex(const shared_ptr<T> ptr, int const index) {
 		if (index < capacite) {
 			elements[index] = ptr;
 		}

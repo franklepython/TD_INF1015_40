@@ -216,11 +216,6 @@ ostream& operator << (ostream& o, const Film* filmPointeur) {
 	return o;
 }
 
-ostream& operator << (ostream& o, const string* string) {
-	o << string << endl;
-	return o;
-}
-
 //Surcharge d'operateur pour une liste de films avec <<.
 ostream& operator << (ostream& o, const ListeFilms& listeFilms) {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme). Fait par professeur.
