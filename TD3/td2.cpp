@@ -75,7 +75,6 @@ void ListeFilms::ajouterFilm(Film* film)
 //]
 
 //TODO: Une fonction pour enlever un Film d'une ListeFilms (enlever le pointeur) sans effacer le film; la fonction prenant en paramètre un pointeur vers le film à enlever.  L'ordre des films dans la liste n'a pas à être conservé.
-//[y7ymmk
 // On a juste fait une version const qui retourne un span non const.  C'est valide puisque c'est la struct qui est const et non ce qu'elle pointe.  Ça ne va peut-être pas bien dans l'idée qu'on ne devrait pas pouvoir modifier une liste const, mais il y aurais alors plusieurs fonctions à écrire en version const et non-const pour que ça fonctionne bien, et ce n'est pas le but du TD (il n'a pas encore vraiment de manière propre en C++ de définir les deux d'un coup).
 span<Film*> ListeFilms::enSpan() const { return span(elements, nElements); }
 
@@ -106,7 +105,6 @@ shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur) const
 	}
 	return nullptr;
 }
-//]
 
 
 //TODO: Compléter les fonctions pour lire le fichier et créer/allouer une ListeFilms.  La ListeFilms devra être passée entre les fonctions, pour vérifier l'existence d'un Acteur avant de l'allouer à nouveau (cherché par nom en utilisant la fonction ci-dessus).
@@ -264,9 +262,11 @@ Film* ListeFilms::rechercheCritereFilm(const auto& critereDeRecherche) const {
 	return nullptr;
 }
 
+//Chapitre 10, Lambda et afficahge de la recherche
 void ListeFilms::retourRechercheCritereFilm(const ListeFilms& listeFilms) {
 	Film* filmCritere;
 	filmCritere = listeFilms.rechercheCritereFilm([](auto film) {
+		//choisir le critere ici!
 		return film->recette == 955;
 		}
 	);
@@ -279,6 +279,7 @@ void ListeFilms::retourRechercheCritereFilm(const ListeFilms& listeFilms) {
 	}
 }
 
+//surcharge d'operateur pour qu'on puisse utiliser l'index d'un acteur
 template <class T>
 shared_ptr<T> Liste<T>::operator[](int index)
 {
