@@ -23,7 +23,7 @@ public:
 	void ajouterFilm(Film* film);
 	void enleverFilm(const Film* film);
 
-	shared_ptr<Acteur> trouverActeur(const std::string& nomActeur) const;
+	shared_ptr<Acteur> trouverActeur(const std::string& nomActeur); // methode const n'est plus const
 	span<Film*> enSpan() const;
 	int size() const { return nElements; }
 
@@ -117,15 +117,35 @@ private:
 
 using ListeActeurs = Liste<Acteur>;
 
-class Film
+class Item
 {
-	string realisateur = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-	int recette = 0; // Année de sortie et recette globale du film en millions de dollars
-	ListeActeurs acteurs;
+public:
+
+	Item() = default;
+	Item(string titre, int anneeSortie): titre_(titre), anneeSortie_(anneeSortie) {};
+	string titre_ = "default";
+	int anneeSortie_ = 0;
+
+private:
+
+};
+
+class Film: public Item
+{
+
+public:
+
+	Film() = default;
+	Film(string realisateur, int recette, ListeActeurs acteurs): realisateur_(realisateur), recette_(recette), acteurs_(acteurs),  Item() {};
+	string realisateur_ = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
+	int recette_ = 0; // Année de sortie et recette globale du film en millions de dollars
+	ListeActeurs acteurs_;
 
 	friend ostream& operator<< (std::ostream& o, const Film& film);
+	friend Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
+	friend shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur);
 
-	//Film(const Film& autreFilm);
+private:
 };
 
 class Livre 
@@ -135,12 +155,6 @@ class Livre
 
 };
 
-class item
-{
-	string titre = "";
-	int anneeSortie = 0
-
-};
 
 struct Acteur
 {
