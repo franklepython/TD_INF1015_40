@@ -1,4 +1,12 @@
-﻿//*** Solutionnaire version 2, sans les //[ //] au bon endroit car le code est assez différent du code fourni.
+﻿/**
+* Un programme qui organise des films et des acteurs à l'aide de pointeurs à partir d'objets de types ListeFilms
+* \file   td3.cpp
+* \author Ammah et Trahan
+* \date   5 mars 2023
+* Créé le 16 février 2023
+*/
+
+
 #pragma region "Includes"//{
 #define _CRT_SECURE_NO_WARNINGS // On permet d'utiliser les fonctions de copies de chaînes qui sont considérées non sécuritaires.
 
@@ -332,7 +340,7 @@ int main()
 
 	//Chapitre 9 #3
 	listeTextes.modifierElementsIndex(make_shared<string>(" Woof "), 0);
-	listeTextes.accesElements()[1] = make_shared<string>(" Bye ");
+	listeTextes.accesElements()[1] = make_shared<string*>(" Bye ");
 	
 	//Chapitre 9 #4
 	cout << "Affichage des éléments de listeTextes après les modifications: " << *listeTextes[0] << *listeTextes[1] << endl;
@@ -372,31 +380,6 @@ int main()
 //[
 //]
 
-<<<<<<< HEAD
-	Liste<string> listeTextes(2);
-	shared_ptr<string> ptrString1 = make_shared<string>("string1");
-	shared_ptr<string> ptrString2 = make_shared<string>("string2");
-
-	listeTextes.modifierElements(ptrString1, 0);
-	listeTextes.modifierElements(ptrString2, 1);
-
-	Liste<string> listeTextes2 = listeTextes;
-
-	shared_ptr<string> ptrString3 = make_shared<string>("string3");
-	listeTextes.modifierElements(ptrString3, 0);
-
-	cout << *listeTextes.elements[0] << endl;
-
-	listeTextes.modifierElements(ptrString3, 0);
-	cout << listeTextes.elements[0] << endl;
-
-
-	//Affichage de la recherche d'un film à l'aide d'un critère à l'aide de lambda.
-	listeFilms.retourRechercheCritereFilm(listeFilms);
-
-
-=======
->>>>>>> 2dc2fcfb5548ecdc81d503e1d68e5a589750e9f2
 
 	
 

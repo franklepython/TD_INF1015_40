@@ -1,4 +1,7 @@
 #pragma once
+
+
+
 // Structures mémoires pour une collection de films.
 
 #include <string>
