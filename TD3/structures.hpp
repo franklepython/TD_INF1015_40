@@ -1,4 +1,7 @@
 #pragma once
+
+
+
 // Structures mémoires pour une collection de films.
 
 #include <string>
@@ -114,15 +117,29 @@ private:
 
 using ListeActeurs = Liste<Acteur>;
 
-struct Film
+class Film
 {
-	string titre = "", realisateur = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-	int anneeSortie = 0, recette = 0; // Année de sortie et recette globale du film en millions de dollars
-	
+	string realisateur = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
+	int recette = 0; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs;
+
 	friend ostream& operator<< (std::ostream& o, const Film& film);
 
 	//Film(const Film& autreFilm);
+};
+
+class Livre 
+{
+	string auteur = "";
+	int copiesVendues = 0, nombrePages = 0;
+
+};
+
+class item
+{
+	string titre = "";
+	int anneeSortie = 0
+
 };
 
 struct Acteur
