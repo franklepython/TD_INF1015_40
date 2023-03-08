@@ -137,21 +137,28 @@ public:
 
 	Film() = default;
 	Film(string realisateur, int recette, ListeActeurs acteurs): realisateur_(realisateur), recette_(recette), acteurs_(acteurs),  Item() {};
-	string realisateur_ = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
-	int recette_ = 0; // Année de sortie et recette globale du film en millions de dollars
 	ListeActeurs acteurs_;
 
 	friend ostream& operator<< (std::ostream& o, const Film& film);
 	friend Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
 	friend shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur);
 
+	string realisateur_ = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
+	int recette_ = 0; // Année de sortie et recette globale du film en millions de dollars
 private:
 };
 
-class Livre 
+
+class Livre : public Item
 {
-	string auteur = "";
-	int copiesVendues = 0, nombrePages = 0;
+public:
+	Livre() = default;
+	Livre(string auteur, int nMillionsDeCopiesVendues, int nPages) : auteur_(auteur), nMillionsDeCopiesVendues_(nMillionsDeCopiesVendues), nPages_(nPages),
+	Item() {};
+
+private:
+	string auteur_ = "";
+	int nMillionsDeCopiesVendues_ = 0, nPages_ = 0;
 
 };
 
