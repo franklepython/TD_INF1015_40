@@ -290,9 +290,10 @@ shared_ptr<T> Liste<T>::operator[](int index)
 	return spanListeActeurs()[index];
 }
 
-void transfererFilms(vector<Item*>& vecteurItem, ListeFilms &listeFilms) {
+void transfererFilms(vector<shared_ptr<Item>>& vecteurItem, ListeFilms &listeFilms) {
 	for (Film* film : listeFilms.enSpan()) {
-		Item* ptrFilm = dynamic_cast<Item*>(film);
+
+		shared_ptr<Item> ptrFilm = make_shared<Item>(*film);
 		vecteurItem.push_back(ptrFilm);
 	}
 }
@@ -314,7 +315,7 @@ int main()
 	ListeFilms listeFilms("films.bin");
 
 	
-	vector<Item*> vecteurItem;
+	vector<shared_ptr<Item>> vecteurItem;
 	transfererFilms(vecteurItem, listeFilms);
 
 
