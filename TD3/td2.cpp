@@ -224,6 +224,7 @@ ostream& operator << (ostream& o, const Film* filmPointeur) {
 	return o;
 }
 
+
 //Surcharge d'operateur pour une liste de films avec <<.
 ostream& operator << (ostream& o, const ListeFilms& listeFilms) {
 	//TODO: Utiliser des caractères Unicode pour définir la ligne de séparation (différente des autres lignes de séparations dans ce progamme). Fait par professeur.
@@ -289,6 +290,13 @@ shared_ptr<T> Liste<T>::operator[](int index)
 	return spanListeActeurs()[index];
 }
 
+void transfererFilms(vector<Item*>& vecteurItem, ListeFilms &listeFilms) {
+	for (Film* film : listeFilms.enSpan()) {
+		Item* ptrFilm = dynamic_cast<Item*>(film);
+		vecteurItem.push_back(ptrFilm);
+	}
+}
+
 int main()
 {
 #ifdef VERIFICATION_ALLOCATION_INCLUS
@@ -305,80 +313,9 @@ int main()
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs_ sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ListeFilms listeFilms("films.bin");
 
-	//Chapitre 7-8 #1
-	Film skylien = *listeFilms[0];
-	cout << skylien;
-
-	//Chapitre 7-8 #2
-	skylien.titre_ = "Skylien";
-	cout << skylien;
-
-	//Chapitre 7-8 #3
-	skylien.acteurs_.accesElements()[0] = listeFilms[1]->acteurs_.accesElements()[0];
-	cout << skylien;
-
-	//Chapitre 7-8 #4
-	skylien.acteurs_[0]->nom = "Daniel Wroughton Craig";
-	cout << skylien;
-
-	//Chapitre 7-8 #5
-	cout << skylien << endl;
-	cout << *listeFilms[0] << endl;
-	cout << *listeFilms[1] << endl;
-
-	cout << ligneDeSeparation;
-
-	//Chapitre 9 #2
-	string strings[2] = { " Miaw ", " Allo " };
-	Liste<string> listeTextes;
-	listeTextes.modifierCapacite(2);
-	listeTextes.modifierNElements(2);
-	listeTextes.CreationPointeursElementsString(strings);
-	cout << "Affichage des éléments de listeTextes: " << *listeTextes[0] << *listeTextes[1] << endl;
-	Liste<string> listeTextes2 = listeTextes;
-	cout << "Affichage des éléments de listeTextes2: " << *listeTextes2[0] << *listeTextes2[1] << endl;
-
-	//Chapitre 9 #3
-	listeTextes.modifierElementsIndex(make_shared<string>(" Woof "), 0);
-	listeTextes.accesElements()[1] = make_shared<string>(" Bye ");
-
-	//Chapitre 9 #4
-	cout << "Affichage des éléments de listeTextes après les modifications: " << *listeTextes[0] << *listeTextes[1] << endl;
-	cout << "Affichage des éléments de listeTextes2 après les modifications: " << *listeTextes2[0] << *listeTextes2[1] << endl;
-
-	cout << ligneDeSeparation << "Le premier film de la liste est:" << endl;
-	//TODO: Afficher le premier film de la liste.  Devrait être Alien.
-	cout << *listeFilms[0];
-
-	cout << ligneDeSeparation << "Les films sont:" << endl;
-	//TODO: Afficher la liste des films.  Il devrait y en avoir 7.
-	cout << listeFilms;
-
-	//TODO: Modifier l'année de naissance de Benedict Cumberbatch pour être 1976 (elle était 0 dans les données lues du fichier).  Vous ne pouvez pas supposer l'ordre des films et des acteurs_ dans les listes, il faut y aller par son nom.
-	listeFilms.trouverActeur("Benedict Cumberbatch")->anneeNaissance = 1976;
-
-	//TODO: Détruire et enlever le premier film de la liste (Alien).  Ceci devrait "automatiquement" (par ce que font vos fonctions) détruire les acteurs_ Tom Skerritt et John Hurt, mais pas Sigourney Weaver puisqu'elle joue aussi dans Avatar.
-	detruireFilm(listeFilms.enSpan()[0]);
-	listeFilms.enleverFilm(listeFilms[0]);
-
-	cout << ligneDeSeparation << "Les films sont maintenant:" << endl;
-	//TODO: Afficher la liste des films.
-	cout << listeFilms;
-
-
-
-	//Affichage de la recherche d'un film à l'aide d'un critère à l'aide de lambda. (modifier critère dans cette fonction)
-	listeFilms.retourRechercheCritereFilm(listeFilms);
-
-	//TODO: Faire les appels qui manquent pour avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
-	//[
-	// Les lignes à mettre ici dépendent de comment ils ont fait leurs fonctions.  Dans mon cas:
-	listeFilms.enleverFilm(nullptr); // Enlever un film qui n'est pas dans la liste (clairement que nullptr n'y est pas).
-	//afficherFilmographieActeur(listeFilms, "N'existe pas"); // Afficher les films d'un acteur qui n'existe pas.
-	//]
-	//TODO: Détruire tout avant de terminer le programme.  L'objet verifierFuitesAllocations devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
-//[
-//]
+	
+	vector<Item*> vecteurItem;
+	transfererFilms(vecteurItem, listeFilms);
 
 
 
