@@ -306,7 +306,7 @@ void ajouterLivre(vector<shared_ptr<Item>>& vecteurItem, string fichierLivre) {
 
 	while (!fichier.eof()) 
 	{
-		Livre* livre = new Livre;
+		shared_ptr<Livre> livre = make_shared<Livre>();
 
 		fichier >> std::quoted(livre->titre_) >>
 			livre->anneeSortie_ >> std::quoted(livre->auteur_) >>
