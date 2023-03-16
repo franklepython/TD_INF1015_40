@@ -121,8 +121,8 @@ class Item
 {
 public:
 
-	Item() = default;
-	Item(string titre, int anneeSortie): titre_(titre), anneeSortie_(anneeSortie) {};
+	//Item() = default;
+	//Item(string titre, int anneeSortie): titre_(titre), anneeSortie_(anneeSortie) {};
 	string titre_ = "default";
 	int anneeSortie_ = 0;
 
@@ -135,8 +135,8 @@ class Film: public Item
 
 public:
 
-	Film() = default;
-	Film(string realisateur, int recette, ListeActeurs acteurs): realisateur_(realisateur), recette_(recette), acteurs_(acteurs),  Item() {};
+	//Film() = default;
+	//Film(string realisateur, int recette, ListeActeurs acteurs): realisateur_(realisateur), recette_(recette), acteurs_(acteurs),  Item() {};
 	ListeActeurs acteurs_;
 
 	friend ostream& operator<< (std::ostream& o, const Film& film);
@@ -145,21 +145,17 @@ public:
 
 	string realisateur_ = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int recette_ = 0; // Année de sortie et recette globale du film en millions de dollars
-private:
 };
 
 
 class Livre : public Item
 {
 public:
-	Livre() = default;
-	Livre(string auteur, int nMillionsDeCopiesVendues, int nPages) : auteur_(auteur), nMillionsDeCopiesVendues_(nMillionsDeCopiesVendues), nPages_(nPages),
-	Item() {};
-
-private:
+	//Livre() = default;
+	//Livre(string auteur, int nMillionsDeCopiesVendues, int nPages) : auteur_(auteur), nMillionsDeCopiesVendues_(nMillionsDeCopiesVendues), nPages_(nPages),
+	//Item() {};
 	string auteur_ = "";
 	int nMillionsDeCopiesVendues_ = 0, nPages_ = 0;
-
 };
 
 

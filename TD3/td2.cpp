@@ -24,6 +24,7 @@
 #include "gsl/span"
 #include "debogage_memoire.hpp"        // Ajout des numéros de ligne des "new" dans le rapport de fuites.  Doit être après les include du système, qui peuvent utiliser des "placement new" (non supporté par notre ajout de numéros de lignes).
 #include <iomanip>
+
 using namespace std;
 using namespace iter;
 using namespace gsl;
@@ -297,20 +298,20 @@ void transfererFilms(vector<shared_ptr<Item>>& vecteurItem, ListeFilms& listeFil
 	}
 }
 
-
 //pk pas nommer la fonction "ajouterLivre" 
 void ajouterLivre(vector<shared_ptr<Item>>& vecteurItem, string fichierLivre) {
 
 	fstream fichier;
 	fichier.open(fichierLivre);
 
-	while (!fichier.eof()) {
+	while (!fichier.eof()) 
+	{
 		Livre* livre = new Livre;
 
 		fichier >> std::quoted(livre->titre_) >>
 			livre->anneeSortie_ >> std::quoted(livre->auteur_) >>
 			livre->nMillionsDeCopiesVendues_ >> livre->nPages_;
-
+		
 		vecteurItem.push_back(make_shared<Item>(*livre));
 	}
 
@@ -333,14 +334,23 @@ int main()
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs_ sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ListeFilms listeFilms("films.bin");
 
-	
+
 	vector<shared_ptr<Item>> vecteurItem;
 
 	transfererFilms(vecteurItem, listeFilms);
-	ajouterLivre(vecteurItem, "livres.txt");
-
-	cout << vecteurItem[6]->anneeSortie_ << endl;
-
-
+	ajouterLivre(vecteurItem, "livresbiblio.txt");
+	
+	cout << vecteurItem[1]->titre_ << endl;
+	cout << vecteurItem[2]->titre_ << endl;
+	cout << vecteurItem[3]->titre_ << endl;
+	cout << vecteurItem[4]->titre_ << endl;
+	cout << vecteurItem[5]->titre_ << endl;
+	cout << vecteurItem[6]->titre_ << endl;
+	cout << vecteurItem[7]->titre_ << endl;
+	cout << vecteurItem[8]->titre_ << endl;
+	cout << vecteurItem[9]->titre_ << endl;
+	cout << vecteurItem[10]->titre_ << endl;
+	cout << vecteurItem[11]->titre_ << endl;
+	cout << vecteurItem[12]->titre_ << endl;
 
 }
