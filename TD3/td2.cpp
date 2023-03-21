@@ -303,18 +303,23 @@ void ajouterLivre(vector<shared_ptr<Item>>& vecteurItem, string fichierLivre) {
 
 	fstream fichier;
 	fichier.open(fichierLivre);
+	cout << " fichier ouvert!" << endl;
 
 	while (!fichier.eof()) {
-		Livre* livre = new Livre;
 
-		fichier >> std::quoted(livre->titre_) >>
-			livre->anneeSortie_ >> std::quoted(livre->auteur_) >>
-			livre->nMillionsDeCopiesVendues_ >> livre->nPages_;
+		shared_ptr<Livre> ptrLivre = make_shared<Livre>();
 
-		vecteurItem.push_back(make_shared<Item>(*livre));
+		fichier >> std::quoted(ptrLivre->titre_) >>
+		ptrLivre->anneeSortie_ >> std::quoted(ptrLivre->auteur_) >>
+		ptrLivre->nMillionsDeCopiesVendues_ >> ptrLivre->nPages_;
+
+		vecteurItem.push_back(make_shared<Item>(*ptrLivre.get()));
+		cout << ptrLivre->titre_ << " ajoute" << endl;
+
 	}
-
 	fichier.close();
+
+	cout << " fichier lu!" << endl;
 }
 
 int main()
@@ -337,9 +342,12 @@ int main()
 	vector<shared_ptr<Item>> vecteurItem;
 
 	transfererFilms(vecteurItem, listeFilms);
+	cout << vecteurItem.size() << endl;
 	ajouterLivre(vecteurItem, "livres.txt");
 
-	cout << vecteurItem[6]->anneeSortie_ << endl;
+	cout << vecteurItem.size() << endl;
+
+	
 
 
 
