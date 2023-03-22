@@ -123,20 +123,25 @@ public:
 
 	Item() = default;
 	Item(string titre, int anneeSortie): titre_(titre), anneeSortie_(anneeSortie) {};
+	virtual ~Item() = default;
+
+
 	string titre_ = "default";
 	int anneeSortie_ = 0;
-
 private:
 
 };
 
-class Film: public Item
+class Film: virtual public Item // avoir un ptr vers item
 {
 
 public:
 
+
 	Film() = default;
-	Film(string realisateur, int recette, ListeActeurs acteurs): realisateur_(realisateur), recette_(recette), acteurs_(acteurs),  Item() {};
+	Film(string titre, int anneeSortie, string realisateur, int recette, ListeActeurs acteurs): realisateur_(realisateur), 
+		recette_(recette), acteurs_(acteurs),  Item(titre, anneeSortie) {};
+
 	ListeActeurs acteurs_;
 
 	friend ostream& operator<< (std::ostream& o, const Film& film);
@@ -146,24 +151,32 @@ public:
 	string realisateur_ = ""; // Titre et nom du réalisateur (on suppose qu'il n'y a qu'un réalisateur).
 	int recette_ = 0; // Année de sortie et recette globale du film en millions de dollars
 private:
+
 };
 
 
-class Livre : public Item
+class Livre : virtual public Item
 {
 public:
 	Livre() = default;
-	Livre(string auteur, int nMillionsDeCopiesVendues, int nPages) : auteur_(auteur), nMillionsDeCopiesVendues_(nMillionsDeCopiesVendues), nPages_(nPages),
-	Item() {};
+	Livre(string titre, int anneSortie, string auteur, int nMillionsDeCopiesVendues, int nPages) : auteur_(auteur), nMillionsDeCopiesVendues_(nMillionsDeCopiesVendues), nPages_(nPages),
+	Item(titre, anneSortie) {};
 
 private:
 	string auteur_ = "";
 	int nMillionsDeCopiesVendues_ = 0, nPages_ = 0;
-
 };
 
+class FilmLivre : public Film, public Livre {
+
+public:
+	FilmLivre(Film film, Livre livre) : Film(film), Livre(livre) {};
+
+private:
+};
 
 struct Acteur
 {
 	string nom = ""; int anneeNaissance = 0; char sexe = ' ';
 };
+

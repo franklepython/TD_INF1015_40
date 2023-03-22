@@ -17,6 +17,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <limits>
 #include <algorithm>
@@ -24,6 +25,7 @@
 #include "gsl/span"
 #include "debogage_memoire.hpp"        // Ajout des numéros de ligne des "new" dans le rapport de fuites.  Doit être après les include du système, qui peuvent utiliser des "placement new" (non supporté par notre ajout de numéros de lignes).
 #include <iomanip>
+
 using namespace std;
 using namespace iter;
 using namespace gsl;
@@ -293,33 +295,49 @@ shared_ptr<T> Liste<T>::operator[](int index)
 
 void transfererFilms(vector<shared_ptr<Item>>& vecteurItem, ListeFilms& listeFilms) {
 	for (Film* film : listeFilms.enSpan()) {
-		vecteurItem.push_back(make_shared<Item>(*film));
+		vecteurItem.push_back(make_shared<Film>(*film));
 	}
 }
-
 
 //pk pas nommer la fonction "ajouterLivre" 
 void ajouterLivre(vector<shared_ptr<Item>>& vecteurItem, string fichierLivre) {
 
-	fstream fichier;
+	/*fstream fichier;
 	fichier.open(fichierLivre);
-	cout << " fichier ouvert!" << endl;
 
-	while (!fichier.eof()) {
+	while (!fichier.eof())
+	{
+		shared_ptr<Livre> livre = make_shared<Livre>();
 
-		shared_ptr<Livre> ptrLivre = make_shared<Livre>();
+		fichier >> std::quoted(livre->titre_) >>
+			livre->anneeSortie_ >> std::quoted(livre->auteur_) >>
+			livre->nMillionsDeCopiesVendues_ >> livre->nPages_;
 
-		fichier >> std::quoted(ptrLivre->titre_) >>
-		ptrLivre->anneeSortie_ >> std::quoted(ptrLivre->auteur_) >>
-		ptrLivre->nMillionsDeCopiesVendues_ >> ptrLivre->nPages_;
+		vecteurItem.push_back(make_shared<Item>(*livre));
+	}*/
 
-		vecteurItem.push_back(make_shared<Item>(*ptrLivre.get()));
-		cout << ptrLivre->titre_ << " ajoute" << endl;
+	ifstream fichier(fichierLivre);
 
+	string ligne;
+	while (getline(fichier, ligne)) {
+		stringstream ss(ligne); // traiter ligne comme un stream pour extraire les donnes
+		string titre;
+		int anneeSortie;
+		string auteur;
+		int nMillionsDeCopiesVendues;
+		int nPages;
+
+		ss >> quoted(titre) >> anneeSortie >> quoted(auteur) >> nMillionsDeCopiesVendues >> nPages;
+
+		Livre livre(titre, anneeSortie, auteur, nMillionsDeCopiesVendues, nPages);
+
+		shared_ptr<Livre> ptrLivre = make_shared<Livre>(livre);
+
+		vecteurItem.push_back(ptrLivre);
 	}
-	fichier.close();
 
-	cout << " fichier lu!" << endl;
+
+	fichier.close();
 }
 
 int main()
@@ -338,17 +356,17 @@ int main()
 	//TODO: La ligne suivante devrait lire le fichier binaire en allouant la mémoire nécessaire.  Devrait afficher les noms de 20 acteurs_ sans doublons (par l'affichage pour fins de débogage dans votre fonction lireActeur).
 	ListeFilms listeFilms("films.bin");
 
-	
+
 	vector<shared_ptr<Item>> vecteurItem;
 
 	transfererFilms(vecteurItem, listeFilms);
-	cout << vecteurItem.size() << endl;
-	ajouterLivre(vecteurItem, "livres.txt");
-
-	cout << vecteurItem.size() << endl;
-
+	ajouterLivre(vecteurItem, "livresbiblio.txt");
 	
+	Film* ptrFilmLeHobbit = dynamic_cast<Film*>(vecteurItem[4].get());
+	Livre* ptrLivreLeHobbit = dynamic_cast<Livre*>(vecteurItem[9].get());
+	
+	FilmLivre filmLivre(*ptrFilmLeHobbit, *ptrLivreLeHobbit);
 
-
+	vecteurItem.push_back(make_shared<FilmLivre>(filmLivre));
 
 }
