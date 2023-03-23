@@ -122,23 +122,36 @@ public:
 class Item : public Affichable
 {
 public:
+	//Pour qu'on garde le titre et l'annee de sortie en private
+	string accesTitre() const {
+		return titre_;
+	}
+
+	int accesAnneeSortie() const {
+		return anneeSortie_;
+	}
+	void modifierAnneeSortie(int nouvelleAnneeSortie) {
+		anneeSortie_ = nouvelleAnneeSortie;
+	}
+
+	void modifierTitre(string nouveauTitre) {
+		titre_ = nouveauTitre;
+	}
+
 	void afficher(ostream& os) const override;
 	Item() = default;
 	Item(string titre, int anneeSortie) : titre_(titre), anneeSortie_(anneeSortie) {};
 	virtual ~Item() = default;
 
-
+private:
 	string titre_ = "default";
 	int anneeSortie_ = 0;
-private:
-
 };
 
 class Film : virtual public Item
 {
 
 public:
-
 	void afficher(ostream& os) const override;
 	Film() = default;
 	Film(string titre, int anneeSortie, string realisateur, int recette, ListeActeurs acteurs) : realisateur_(realisateur),
@@ -150,6 +163,7 @@ public:
 	friend Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
 	friend shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur);
 
+private:
 	string realisateur_ = "";
 	int recette_ = 0;
 
@@ -172,7 +186,7 @@ private:
 class FilmLivre : public Film, public Livre {
 
 public:
-	FilmLivre(Film film, Livre livre) : Film(film), Livre(livre), Item(film.titre_, film.anneeSortie_) {};
+	FilmLivre(Film film, Livre livre) : Film(film), Livre(livre), Item(film.accesTitre(), film.accesAnneeSortie()) {};
 	void afficher(ostream& os) const override;
 };
 

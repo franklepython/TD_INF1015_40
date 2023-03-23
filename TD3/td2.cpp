@@ -132,14 +132,14 @@ shared_ptr<Acteur> lireActeur(istream& fichier//[
 Film* lireFilm(istream& fichier, ListeFilms& listeFilms) {
 	Film film = {};
 	Film* pointeurFilm = new Film;
-	pointeurFilm->titre_ = lireString(fichier);
+	pointeurFilm->modifierTitre(lireString(fichier));
 	pointeurFilm->realisateur_ = lireString(fichier);
-	pointeurFilm->anneeSortie_ = lireUint16(fichier);
+	pointeurFilm->modifierAnneeSortie(lireUint16(fichier));
 	pointeurFilm->recette_ = lireUint16(fichier);
 	pointeurFilm->acteurs_.modifierNElements(lireUint8(fichier));
 	pointeurFilm->acteurs_.modifierCapacite(pointeurFilm->acteurs_.accesNElements());
 
-	cout << "Création Film " << film.titre_ << endl;
+	cout << "Création Film " << film.accesTitre() << endl;
 	pointeurFilm->acteurs_.modifierElements(make_unique<shared_ptr<Acteur>[]>(pointeurFilm->acteurs_.accesNElements()));
 
 	for (shared_ptr<Acteur>& acteur : pointeurFilm->acteurs_.spanListeActeurs())
@@ -159,7 +159,7 @@ ListeFilms::ListeFilms(const string& nomFichier) : possedeLesFilms_(true)
 }
 
 void detruireFilm(Film* film) {
-	cout << "Destruction Film " << film->titre_ << endl;
+	cout << "Destruction Film " << film->accesTitre() << endl;
 	delete film;
 }
 
@@ -194,7 +194,7 @@ void Film::afficher(ostream& os) const
 	Item::afficher(os);
 	os << endl;
 	os << "Réalisateur: " << realisateur_ << endl;
-	os << "Année: " << anneeSortie_ << endl;
+	os << "Année: " << accesAnneeSortie() << endl;
 	os << "recette: " << recette_ << "M$" << endl;
 	os << "acteurs: " << endl;
 		for (shared_ptr<Acteur> acteur : acteurs_.spanListeActeurs()) {
@@ -216,7 +216,6 @@ void Livre::afficher(ostream& os) const
 void FilmLivre::afficher(ostream& os) const
 {
 	os << "Le FilmLivre est ";
-	Item::afficher(os);
 	os << endl;
 	Livre::afficher(os);
 	os << endl;
