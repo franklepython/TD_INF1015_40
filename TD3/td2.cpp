@@ -368,5 +368,10 @@ int main()
 	FilmLivre filmLivre(*ptrFilmLeHobbit, *ptrLivreLeHobbit);
 
 	vecteurItem.push_back(make_shared<FilmLivre>(filmLivre));
+	
+	cout << " debut des affichages des Items" << endl;
+	for (shared_ptr<Item> ptrItem : vecteurItem) {
+		cout << ptrItem->titre_ << endl;
+	}
 
 }
