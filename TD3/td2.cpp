@@ -23,6 +23,8 @@
 #include "gsl/span"
 #include "debogage_memoire.hpp"
 #include <iomanip>
+#include <forward_list>
+
 
 using namespace std;
 using namespace iter;
@@ -275,6 +277,38 @@ void ajouterLivre(vector<shared_ptr<Item>>& bibliothequeItems, string fichierLiv
 	fichier.close();
 };
 
+
+void copierPtrItems(forward_list<shared_ptr<Item>>& listLieSimple, vector<shared_ptr<Item>> const &bibliothequeItems) { //1.1
+	for (int i = bibliothequeItems.size() - 1; i >= 0; i--) {
+		listLieSimple.push_front(bibliothequeItems[i]);
+	}
+}
+
+void copierListEnOrdreInverse(forward_list<shared_ptr<Item>> listeOrdreOriginal, forward_list<shared_ptr<Item>>& listeOrdreInverse) {
+	
+	while (listeOrdreOriginal.empty() != true) {
+		listeOrdreInverse.push_front(listeOrdreOriginal.front());
+		listeOrdreOriginal.pop_front();
+	 }
+}
+
+void copierListeOriginale(forward_list<shared_ptr<Item>> const& listeOriginal, forward_list<shared_ptr<Item>>& copieListeOriginale) {
+
+	auto itTemporaire = copieListeOriginale.before_begin();
+
+	for (auto it = listeOriginal.begin(); it != listeOriginal.end(); ++it, ++itTemporaire) {
+		copieListeOriginale.insert_after(itTemporaire, *(it));
+	}
+}
+
+void inverserListVect(forward_list<shared_ptr<Item>> const& listeOriginal, vector<shared_ptr<Item>>& vectListOriginaleIverse) {
+
+	for (auto it = listeOriginal.begin(); it != listeOriginal.end(); ++it) {
+		vectListOriginaleIverse.insert(vectListOriginaleIverse.begin(), *it);
+	}
+}
+
+
 int main()
 {
 #ifdef VERIFICATION_ALLOCATION_INCLUS
@@ -298,6 +332,24 @@ int main()
 	bibliothequeItems.push_back(make_shared<FilmLivre>(filmLivre));
 
 	cout << bibliothequeItems;
+
+	forward_list<shared_ptr<Item>> listeOrdreOriginal; // 1.1
+
+	copierPtrItems(listeOrdreOriginal, bibliothequeItems);
+
+	forward_list<shared_ptr<Item>> listeOrdreInverse; // 1.2
+
+	copierListEnOrdreInverse(listeOrdreOriginal, listeOrdreInverse);
+
+	forward_list<shared_ptr<Item>> copieListeOriginale; // 1.3
+
+	copierListeOriginale(listeOrdreOriginal, copieListeOriginale);
+
+	vector<shared_ptr<Item>> vectListOriginaleIverse; // 1.4
+
+	inverserListVect(listeOrdreOriginal, vectListOriginaleIverse); // complexite de type O(n2)
+	
+	//cout << "The wanted list is: " << vectListOriginaleIverse.empty() << endl; // test pour verif sur le list
 
 	return 0;
 }
