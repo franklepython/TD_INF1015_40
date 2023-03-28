@@ -323,19 +323,34 @@ int main()
 
 	copierPtrItems(listeOrdreOriginal, bibliothequeItems);
 
+	cout << ligneDeSeparation << endl;
+	afficherListeItems(listeOrdreOriginal);
+
 	forward_list<shared_ptr<Item>> listeOrdreInverse; // 1.2
 
 	copierListEnOrdreInverse(listeOrdreOriginal, listeOrdreInverse);
+
+	cout << ligneDeSeparation << endl;
+	afficherListeItems(listeOrdreInverse);
 
 	forward_list<shared_ptr<Item>> copieListeOriginale; // 1.3
 
 	copierListeOriginale(listeOrdreOriginal, copieListeOriginale);
 
-	vector<shared_ptr<Item>> vectListOriginaleIverse; // 1.4
+	cout << ligneDeSeparation << endl;
+	afficherListeItems(copieListeOriginale);
 
-	inverserListVect(listeOrdreOriginal, vectListOriginaleIverse); // complexite de type O(n2)
+	vector<shared_ptr<Item>> vectListOriginaleInverse; // 1.4
+
+	inverserListVect(listeOrdreOriginal, vectListOriginaleInverse); // complexite de type O(n2)
+
+	cout << ligneDeSeparation << endl;
+	afficherListeItems(vectListOriginaleInverse);
 	
 	//cout << "The wanted list is: " << vectListOriginaleIverse.empty() << endl; // test pour verif sur le list
+
+	//copy_if(listeOrdreOriginal.begin(), listeOrdreOriginal.end(), back_inserter(films), [](const std::shared_ptr<Item>& item) { return dynamic_cast<Film*>(item.get()) != nullptr; });
+
 
 	return 0;
 }
