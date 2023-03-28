@@ -113,15 +113,25 @@ using ListeActeurs = Liste<Acteur>;
 
 
 
+
 class Affichable {
 public:
-	virtual void afficher(ostream& o) const = 0;
 	virtual ~Affichable() = default;
+	virtual void afficher(ostream& os) const = 0;
+	virtual void afficherCourt(ostream& os) const {
+		afficher(os);
+	}
+
+
 };
 
 class Item : public Affichable
 {
 public:
+	Item() = default;
+	Item(string titre, int anneeSortie) : titre_(titre), anneeSortie_(anneeSortie) {};
+	virtual ~Item() = default;
+
 	//Pour qu'on garde le titre et l'annee de sortie en private
 	string accesTitre() const {
 		return titre_;
@@ -139,33 +149,28 @@ public:
 	}
 
 	void afficher(ostream& os) const override;
-	Item() = default;
-	Item(string titre, int anneeSortie) : titre_(titre), anneeSortie_(anneeSortie) {};
-	virtual ~Item() = default;
-
-private:
 	string titre_ = "default";
 	int anneeSortie_ = 0;
+private:
 };
 
 class Film : virtual public Item
 {
 
 public:
-	void afficher(ostream& os) const override;
 	Film() = default;
 	Film(string titre, int anneeSortie, string realisateur, int recette, ListeActeurs acteurs) : realisateur_(realisateur),
 		recette_(recette), acteurs_(acteurs), Item(titre, anneeSortie) {};
 
-	ListeActeurs acteurs_;
-
-	friend ostream& operator<< (std::ostream& o, const Film& film);
+	//friend ostream& operator<< (std::ostream& o, const Film& film);
 	friend Film* lireFilm(istream& fichier, ListeFilms& listeFilms);
 	friend shared_ptr<Acteur> ListeFilms::trouverActeur(const string& nomActeur);
 
-private:
+	void afficherCourt(ostream& os) const override;
+	ListeActeurs acteurs_;
 	string realisateur_ = "";
 	int recette_ = 0;
+private:
 
 };
 
@@ -173,25 +178,24 @@ private:
 class Livre : virtual public Item
 {
 public:
-	void afficher(ostream& os) const override;
 	Livre() = default;
 	Livre(string titre, int anneSortie, string auteur, int nMillionsDeCopiesVendues, int nPages) : auteur_(auteur), nMillionsDeCopiesVendues_(nMillionsDeCopiesVendues), nPages_(nPages),
 		Item(titre, anneSortie) {};
 
-private:
+	void afficherCourt(ostream& os) const override;
 	string auteur_ = "";
 	int nMillionsDeCopiesVendues_ = 0, nPages_ = 0;
+private:
 };
 
 class FilmLivre : public Film, public Livre {
 
 public:
 	FilmLivre(Film film, Livre livre) : Film(film), Livre(livre), Item(film.accesTitre(), film.accesAnneeSortie()) {};
-	void afficher(ostream& os) const override;
+	void afficherCourt(ostream& os) const override;
 };
 
 struct Acteur
 {
 	string nom = ""; int anneeNaissance = 0; char sexe = ' ';
 };
-

@@ -188,56 +188,42 @@ ostream& operator<< (ostream& os, const Affichable& affichable)
 
 void Item::afficher(ostream& os) const
 {
-	os << titre_;
+	os << endl;
 }
 
-void Film::afficher(ostream& os) const
+void Film::afficherCourt(ostream& os) const
 {
-	Item::afficher(os);
-	os << endl;
-	os << "Réalisateur: " << realisateur_ << endl;
-	os << "Année: " << accesAnneeSortie() << endl;
-	os << "recette: " << recette_ << "M$" << endl;
-	os << "acteurs: " << endl;
-		for (shared_ptr<Acteur> acteur : acteurs_.spanListeActeurs()) {
-			cout << *acteur;
-		}
-
+	os << titre_ << ", par " << realisateur_ << endl;
 }
 
 
-void Livre::afficher(ostream& os) const
+void Livre::afficherCourt(ostream& os) const
 {
-	Item::afficher(os);
-	os << endl;
-	os << "Auteur: " << auteur_ << endl;
-	os << "Millions de copies vendues: " << nMillionsDeCopiesVendues_ << endl;
-	os << "Nombre de pages: " << nPages_ << endl;
+	os << titre_ << ", de " << auteur_ << endl;
 }
 
-void FilmLivre::afficher(ostream& os) const
+void FilmLivre::afficherCourt(ostream& os) const
 {
-	os << "Le FilmLivre est ";
-	os << endl;
-	Livre::afficher(os);
-	os << endl;
-	Film::afficher(os);
-	os << endl;
+	os << titre_ << ", de " << auteur_ << ", par " << realisateur_ << endl;
 }
 
-ostream& operator << (ostream& o, const vector<shared_ptr<Item>>& listeItems) {
+
+template <typename TypeDeListe>
+void afficherListeItems(const TypeDeListe& listeItems)
+{
 	static const string ligneDeSeparation =
 		"\033[32m────────────────────────────────────────\033[0m\n";
 
 	{};
 
-	o << ligneDeSeparation;
-	for (int i = 0; i < listeItems.size(); i++) {
-		cout << *listeItems[i];
-		o << ligneDeSeparation;
+	cout << ligneDeSeparation;
+	for (const auto& item : listeItems) {
+		item->afficherCourt(cout);
+		cout << ligneDeSeparation;
+
 	}
-	return o;
 }
+
 
 template <class T>
 shared_ptr<T> Liste<T>::operator[](int index)
@@ -331,7 +317,7 @@ int main()
 
 	bibliothequeItems.push_back(make_shared<FilmLivre>(filmLivre));
 
-	cout << bibliothequeItems;
+	afficherListeItems(bibliothequeItems);
 
 	forward_list<shared_ptr<Item>> listeOrdreOriginal; // 1.1
 
