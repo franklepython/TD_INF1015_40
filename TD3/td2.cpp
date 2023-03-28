@@ -24,6 +24,7 @@
 #include "debogage_memoire.hpp"
 #include <iomanip>
 #include <forward_list>
+#include <set>
 
 
 using namespace std;
@@ -309,6 +310,7 @@ void inverserListVect(forward_list<shared_ptr<Item>> const& listeOriginal, vecto
 }
 
 
+
 int main()
 {
 #ifdef VERIFICATION_ALLOCATION_INCLUS
@@ -348,8 +350,21 @@ int main()
 	vector<shared_ptr<Item>> vectListOriginaleIverse; // 1.4
 
 	inverserListVect(listeOrdreOriginal, vectListOriginaleIverse); // complexite de type O(n2)
+
+	/*Film film;
+
+	for (auto&& acteur : film.acteurs_)*/ // 1.5
 	
 	//cout << "The wanted list is: " << vectListOriginaleIverse.empty() << endl; // test pour verif sur le list
+
+	set<Item, Critere> itemsAlph;
+
+	for (shared_ptr<Item> ptrItem : bibliothequeItems) {
+		itemsAlph.insert(*ptrItem);
+	}
+
+
+
 
 	return 0;
 }
