@@ -50,6 +50,19 @@ template<class T >
 class Liste {
 public:
 
+	/*using value_type = Acteur;
+
+	using iterator = std::vector<value_type>::iterator;
+
+	
+	iterator begin() {
+		return elements_.begin();
+	}
+
+	iterator end() {
+		return elements_.end();
+	}*/
+
 	Liste() = default;
 
 	void modifierCapacite(int newCapacite) {
@@ -103,6 +116,9 @@ public:
 		}
 	}
 
+	// implementer begin et end.
+
+
 private:
 	int capacite_ = 0, nElements_ = 0;
 	unique_ptr<shared_ptr<T>[]> elements_;
@@ -130,6 +146,7 @@ public:
 	int accesAnneeSortie() const {
 		return anneeSortie_;
 	}
+
 	void modifierAnneeSortie(int nouvelleAnneeSortie) {
 		anneeSortie_ = nouvelleAnneeSortie;
 	}
@@ -195,3 +212,9 @@ struct Acteur
 	string nom = ""; int anneeNaissance = 0; char sexe = ' ';
 };
 
+struct CritereComp {
+
+	bool operator() (const shared_ptr<Item>& ptr1, const shared_ptr<Item>& ptr2) const {
+		return ptr1.get()->accesTitre() < ptr2.get()->accesTitre();
+	}
+};

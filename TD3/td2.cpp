@@ -353,16 +353,17 @@ int main()
 
 	/*Film film;
 
-	for (auto&& acteur : film.acteurs_)*/ // 1.5
+	for (auto&& acteur : film.acteurs_) {
+
+	}// 1.5*/
 	
 	//cout << "The wanted list is: " << vectListOriginaleIverse.empty() << endl; // test pour verif sur le list
 
-	set<Item, Critere> itemsAlph;
+	set<shared_ptr<Item>, CritereComp> itemsAlph;
 
 	for (shared_ptr<Item> ptrItem : bibliothequeItems) {
-		itemsAlph.insert(*ptrItem);
-	}
-
+		itemsAlph.insert(ptrItem);
+	}	
 
 
 
