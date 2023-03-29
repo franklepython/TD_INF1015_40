@@ -359,10 +359,10 @@ int main()
 		itemsAlph.insert(ptrItem);
 	}
 
-	map<string, shared_ptr<Item>> mapItem;
+	map<string, Item> mapItem;
 
 	for (shared_ptr<Item> ptrItem : bibliothequeItems) {
-		mapItem[ptrItem->accesTitre()] = ptrItem;
+		mapItem[ptrItem->accesTitre()] = *ptrItem;
 	}
 
 	cout << " ca marche !" << endl;
