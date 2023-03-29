@@ -325,7 +325,7 @@ int main()
 
 	cout << ligneDeSeparation << endl;
 	afficherListeItems(listeOrdreOriginal);
-
+	
 	forward_list<shared_ptr<Item>> listeOrdreInverse; // 1.2
 
 	copierListEnOrdreInverse(listeOrdreOriginal, listeOrdreInverse);
