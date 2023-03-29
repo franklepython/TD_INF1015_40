@@ -216,3 +216,12 @@ struct Acteur
 {
 	string nom = ""; int anneeNaissance = 0; char sexe = ' ';
 };
+
+struct CritereComp {
+
+	bool operator() (const shared_ptr<Item>& ptr1, const shared_ptr<Item>& ptr2) const {
+		return ptr1.get()->accesTitre() < ptr2.get()->accesTitre();
+	}
+};
+
+
