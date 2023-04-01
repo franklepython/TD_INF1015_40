@@ -26,7 +26,7 @@
 #include <forward_list>
 #include <set>
 #include <map>
-
+#include <numeric>
 
 using namespace std;
 using namespace iter;
@@ -190,7 +190,7 @@ ostream& operator<< (ostream& os, const Affichable& affichable)
 
 void Item::afficher(ostream& os) const
 {
-	os << endl;
+	os << "L'item est: " << titre_ << endl;
 }
 
 void Film::afficherCourt(ostream& os) const
@@ -327,6 +327,8 @@ int main()
 
 	cout << ligneDeSeparation << endl;
 	afficherListeItems(listeOrdreOriginal);
+
+	forward_list<shared_ptr<Item>> listeNumUnPointUn = listeOrdreOriginal;
 	
 	forward_list<shared_ptr<Item>> listeOrdreInverse; // 1.2
 
@@ -367,7 +369,23 @@ int main()
 
 	cout << " ca marche !" << endl;
 	cout << mapItem["The Hobbit"] << endl;
+	//(mapItem["The Hobbit"])->afficherCourt(cout);
 
+	
+	cout << ligneDeSeparation << endl;
+
+	//3.1
+	vector<shared_ptr<Item>> vecteurDeFilm;
+	copy_if(listeOrdreOriginal.begin(), listeOrdreOriginal.end(), back_inserter(vecteurDeFilm), [](const std::shared_ptr<Item>& item) { return dynamic_cast<Film*>(item.get()) != nullptr; });
+	cout << "Les films trouvés sont: " << endl;
+	afficherListeItems(vecteurDeFilm);
+	
+	cout << ligneDeSeparation << endl;
+	//3.2
+	int sommeRecettesFilmTrouve = accumulate(vecteurDeFilm.begin(), vecteurDeFilm.end(), 0, [](int somme, const shared_ptr<Item>& item) { return somme + (dynamic_cast<Film*>(item.get())->recette_); });
+
+	cout << "La somme des Recettes des films trouvés est " << sommeRecettesFilmTrouve << " millions de dollars" << endl;
+	cout << ligneDeSeparation << endl;
 
 	return 0;
 }
