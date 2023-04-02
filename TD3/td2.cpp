@@ -366,7 +366,10 @@ int main()
 	}
 
 	cout << " ca marche !" << endl;
-	cout << mapItem["The Hobbit"] << endl;
+	
+	cout << (mapItem["The Hobbit"]) << endl;
+
+	cout << "Patrice is the boss." << endl;
 
 
 	return 0;
