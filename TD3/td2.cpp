@@ -2,7 +2,7 @@
 * Un programme qui organise dans une bibliotheque des livres, des films et des FilmLivres sous forme d'Items.
 * \file   td3.cpp
 * \author Ammah et Trahan
-* \date   22 mars 2023
+* \date   2 avril 2023
 * Créé le 7 mars 2023
 */
 
@@ -26,7 +26,7 @@
 #include <forward_list>
 #include <set>
 #include <map>
-
+#include <numeric>
 
 using namespace std;
 using namespace iter;
@@ -190,7 +190,7 @@ ostream& operator<< (ostream& os, const Affichable& affichable)
 
 void Item::afficher(ostream& os) const
 {
-	os << endl;
+	os << "L'item est: " << titre_ << endl;
 }
 
 void Film::afficherCourt(ostream& os) const
@@ -327,6 +327,8 @@ int main()
 
 	cout << ligneDeSeparation << endl;
 	afficherListeItems(listeOrdreOriginal);
+
+	forward_list<shared_ptr<Item>> listeNumUnPointUn = listeOrdreOriginal;
 	
 	forward_list<shared_ptr<Item>> listeOrdreInverse; // 1.2
 
@@ -346,14 +348,21 @@ int main()
 
 	inverserListVect(listeOrdreOriginal, vectListOriginaleInverse); // complexite de type O(n2)
 
+
+
 	cout << ligneDeSeparation << endl;
 	afficherListeItems(vectListOriginaleInverse);
+
+	Film& film = dynamic_cast<Film&>(*bibliothequeItems[0]); // 1.5
+
+	cout << "Les acteurs du film " << film.titre_ << " sont: " << endl;
+
+	for (auto&& acteur : film.acteurs_) {
+		cout << *acteur;
+	}
 	
-	//cout << "The wanted list is: " << vectListOriginaleIverse.empty() << endl; // test pour verif sur le list
 
-	//copy_if(listeOrdreOriginal.begin(), listeOrdreOriginal.end(), back_inserter(films), [](const std::shared_ptr<Item>& item) { return dynamic_cast<Film*>(item.get()) != nullptr; });
-
-	set<shared_ptr<Item>, CritereComp> itemsAlph;
+	set<shared_ptr<Item>, CritereComp> itemsAlph; // 2
 
 	for (shared_ptr<Item> ptrItem : bibliothequeItems) {
 		itemsAlph.insert(ptrItem);
@@ -365,12 +374,23 @@ int main()
 		mapItem[ptrItem->accesTitre()] = *ptrItem;
 	}
 
-	cout << " ca marche !" << endl;
+	cout << mapItem["The Hobbit"] << endl;
 	
-	cout << (mapItem["The Hobbit"]) << endl;
+	cout << ligneDeSeparation << endl;
 
-	cout << "Patrice is the boss." << endl;
+	//3.1
+	vector<shared_ptr<Item>> vecteurDeFilm;
+	copy_if(listeOrdreOriginal.begin(), listeOrdreOriginal.end(), back_inserter(vecteurDeFilm), [](const std::shared_ptr<Item>& item) { return dynamic_cast<Film*>(item.get()) != nullptr; });
+	cout << "Les films trouvés sont: " << endl;
+	afficherListeItems(vecteurDeFilm);
+	
+	cout << ligneDeSeparation << endl;
 
+	//3.2
+	int sommeRecettesFilmsTrouves = accumulate(vecteurDeFilm.begin(), vecteurDeFilm.end(), 0, [](int somme, const shared_ptr<Item>& item) { return somme + (dynamic_cast<Film*>(item.get())->recette_); });
+
+	cout << "La somme des Recettes des films trouvés est " << sommeRecettesFilmsTrouves << " millions de dollars" << endl;
+	cout << ligneDeSeparation << endl;
 
 	return 0;
 }
