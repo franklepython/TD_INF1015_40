@@ -1,9 +1,9 @@
 ﻿/**
-* Un programme qui organise dans une bibliotheque des livres, des films et des FilmLivres sous forme d'Items.
-* \file   td3.cpp
+* Un programme qui organise dans différents types d'ensembles des livres, des films et des FilmLivres sous forme d'Items.
+* \file   td5.cpp
 * \author Ammah et Trahan
 * \date   2 avril 2023
-* Créé le 7 mars 2023
+* Créé le 22 mars 2023
 */
 
 
