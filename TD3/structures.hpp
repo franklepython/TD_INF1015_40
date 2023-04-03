@@ -116,8 +116,13 @@ public:
 		}
 	}
 
-	// implementer begin et end.
+	shared_ptr<T>* begin() {
+		return &elements_[0];
+	}
 
+	shared_ptr<T>* end() {
+		return &elements_[nElements_];
+	}
 
 private:
 	int capacite_ = 0, nElements_ = 0;
